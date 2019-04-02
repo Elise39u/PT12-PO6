@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Kickstart"
+             x:Class="Kickstart.MainPage">
+
+    <StackLayout x:Name="MasterLayout">
+        <StackLayout x:Name="Header"  Orientation="Horizontal" VerticalOptions="Start" BackgroundColor="Maroon">
+            <!-- Place new controls here -->
+            <Label Text="Welcome to Xamarin.Forms!"  />
+        </StackLayout>
+        <ScrollView>
+            <StackLayout x:Name="MidPpart" HorizontalOptions="CenterAndExpand" VerticalOptions="Start">
+                <Button x:Name="QrCode" Text="QR Scannen" Clicked="QrCode_Clicked"/>
+                <Button x:Name="button2" Text="Button2"/>
+            </StackLayout>
+        </ScrollView>
+        <StackLayout x:Name="Footer" Orientation="Horizontal" VerticalOptions="EndAndExpand" Margin="0,0,0,-5" BackgroundColor="Maroon">
+            <Label Text="Test"/>
+        </StackLayout>
+    </StackLayout>
+
+</ContentPage>

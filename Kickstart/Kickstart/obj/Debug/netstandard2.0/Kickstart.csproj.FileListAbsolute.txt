@@ -1,0 +1,12 @@
+D:\Fontys\VS Projects\Kickstart\Kickstart\Kickstart\bin\Debug\netstandard2.0\Kickstart.deps.json
+D:\Fontys\VS Projects\Kickstart\Kickstart\Kickstart\bin\Debug\netstandard2.0\Kickstart.dll
+D:\Fontys\VS Projects\Kickstart\Kickstart\Kickstart\bin\Debug\netstandard2.0\Kickstart.pdb
+D:\Fontys\VS Projects\Kickstart\Kickstart\Kickstart\obj\Debug\netstandard2.0\Kickstart.csprojAssemblyReference.cache
+D:\Fontys\VS Projects\Kickstart\Kickstart\Kickstart\obj\Debug\netstandard2.0\MainPage.xaml.g.cs
+D:\Fontys\VS Projects\Kickstart\Kickstart\Kickstart\obj\Debug\netstandard2.0\views\App.xaml.g.cs
+D:\Fontys\VS Projects\Kickstart\Kickstart\Kickstart\obj\Debug\netstandard2.0\Kickstart.csproj.CoreCompileInputs.cache
+D:\Fontys\VS Projects\Kickstart\Kickstart\Kickstart\obj\Debug\netstandard2.0\Kickstart.AssemblyInfoInputs.cache
+D:\Fontys\VS Projects\Kickstart\Kickstart\Kickstart\obj\Debug\netstandard2.0\Kickstart.AssemblyInfo.cs
+D:\Fontys\VS Projects\Kickstart\Kickstart\Kickstart\obj\Debug\netstandard2.0\Kickstart.dll
+D:\Fontys\VS Projects\Kickstart\Kickstart\Kickstart\obj\Debug\netstandard2.0\Kickstart.pdb
+D:\Fontys\VS Projects\Kickstart\Kickstart\Kickstart\obj\Debug\netstandard2.0\XamlC.stamp
