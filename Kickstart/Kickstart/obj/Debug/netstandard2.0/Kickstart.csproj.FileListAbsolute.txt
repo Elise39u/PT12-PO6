@@ -10,3 +10,4 @@ D:\Fontys\VS Projects\Kickstart\Kickstart\Kickstart\obj\Debug\netstandard2.0\Kic
 D:\Fontys\VS Projects\Kickstart\Kickstart\Kickstart\obj\Debug\netstandard2.0\Kickstart.dll
 D:\Fontys\VS Projects\Kickstart\Kickstart\Kickstart\obj\Debug\netstandard2.0\Kickstart.pdb
 D:\Fontys\VS Projects\Kickstart\Kickstart\Kickstart\obj\Debug\netstandard2.0\XamlC.stamp
+D:\Fontys\VS Projects\Kickstart\Kickstart\Kickstart\obj\Debug\netstandard2.0\views\LoginPage.xaml.g.cs
