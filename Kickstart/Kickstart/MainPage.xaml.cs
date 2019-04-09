@@ -14,24 +14,65 @@ namespace Kickstart
 {
     public partial class MainPage : ContentPage
     {
+        //Global vars
         public Constant Constant { get; private set; } = new Constant();
 
         public MainPage()
         {
+            //Remove the navigation bar for better view and replace it with the header
+            NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
             Init();
+
+            //Check if the user pressed the back button
+            Btn_Return.Clicked += async (sender, args) =>
+            {
+                //If the user pressed the button return it to previous page on the stack
+                await Navigation.PopAsync(true);
+            };
         }
 
         //Code styling and nesscary things that need to run before launch
         void Init()
         {
+            //Header styling
+            Header.BackgroundColor = Constant.BackGroundColor;
+
+            Lbl_Header.TextColor = Constant.TextColor;
+            Lbl_Header.Margin = new Thickness(5,5,0,10);
+            Lbl_Header.HeightRequest = Constant.HeightRequest;
+
+            Btn_Return.HorizontalOptions = LayoutOptions.EndAndExpand;
+
+            //Content Screen Styling
+            foreach (StackLayout item in Content.Children)
+            {
+                foreach (Button button in item.Children)
+                {
+                    button.BackgroundColor = Constant.ButtonBackGroundColor;
+                    button.TextColor = Constant.TextColor;
+                    button.WidthRequest = Constant.WidthRequest;
+                    button.HeightRequest = Constant.HeightRequest;
+                }
+            }
+
+            //Footer styling
+            Footer.BackgroundColor = Constant.BackGroundColor;
+
+            Lbl_Cr.HorizontalOptions = LayoutOptions.Center;
+            Lbl_Cr.VerticalOptions = LayoutOptions.EndAndExpand;
+            Lbl_Cr.VerticalTextAlignment = TextAlignment.Center;
+            Lbl_Cr.HeightRequest = 80;
+            Lbl_Cr.TextColor = Constant.TextColor;
         }
 
         private async void QrCode_Clicked(object sender, EventArgs e)
         {
+            //Let the user know if they want to give access to the camera
             var status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Camera);
             if (status != PermissionStatus.Unknown)
             {
+                //Await the request 
                 var results = await CrossPermissions.Current.RequestPermissionsAsync(Permission.Camera);
                 //Best practice to always check that the key exists
                 if (results.ContainsKey(Permission.Camera))
@@ -39,9 +80,11 @@ namespace Kickstart
                     status = results[Permission.Camera];
                 }
 
+                //Check if Permisson has been granted
                 if (status == PermissionStatus.Granted)
                 {
                 }
+                // If no permisson is deteced or denied Let the user know he cannot continue 
                 else if (status != PermissionStatus.Unknown)
                 {
                     await DisplayAlert("Camera Denied", "Can not continue, try again.", "OK");
@@ -52,7 +95,7 @@ namespace Kickstart
             var customLayout = new StackLayout { };
             var header_qr = new StackLayout
             {
-                BackgroundColor = Constant.backGroundColor,
+                BackgroundColor = Constant.BackGroundColor,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.Start,
                 
@@ -64,7 +107,7 @@ namespace Kickstart
             };
             var footer_qr = new StackLayout
             {
-                BackgroundColor = Constant.backGroundColor,
+                BackgroundColor = Constant.BackGroundColor,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.End
             };
