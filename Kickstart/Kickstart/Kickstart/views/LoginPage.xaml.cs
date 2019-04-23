@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using System.Net.Http.Headers;
-using System.Net.Http;
 using System.Net;
+using System.Net.Http;
 
 namespace Kickstart.views
 {
@@ -92,14 +92,9 @@ namespace Kickstart.views
                 try
                 {
                     HttpClient client = new HttpClient();
-                    Console.WriteLine("Test Debug");
-                    Console.WriteLine(client);
-                    Console.WriteLine("Test Debug");
-                    using(var httpRepsone = await client.PostAsync(loginUrl, loginContent))
+
+                    using(var httpRepsone = await client.PostAsync(loginUrl, loginContent)) // <--- Takes too long due to a Operation Canceld Exception
                     {
-                        Console.WriteLine("Test Debug");
-                        Console.WriteLine(httpRepsone);
-                        Console.WriteLine("Test Debug");
                         if (httpRepsone.StatusCode == HttpStatusCode.OK)
                         {
                             var apiResult = await httpRepsone.Content.ReadAsStreamAsync();
@@ -116,6 +111,7 @@ namespace Kickstart.views
                     await DisplayAlert("Error occuerd", error.ToString(), "Okay");
                 }
             }
+            Login_Lbl.Text = "";
             this.IsBusy = false;
         }
     }

@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kickstart.Android", "Kickst
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kickstart.iOS", "Kickstart\Kickstart.iOS\Kickstart.iOS.csproj", "{1582D654-BFCD-48A7-B8AF-7D8729675D52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kickstart", "Kickstart\Kickstart\Kickstart.csproj", "{9DBB9275-4196-448B-BE8B-943CACDE251F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kickstart", "Kickstart\Kickstart\Kickstart.csproj", "{9DBB9275-4196-448B-BE8B-943CACDE251F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
