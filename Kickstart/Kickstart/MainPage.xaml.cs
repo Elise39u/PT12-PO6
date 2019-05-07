@@ -16,19 +16,19 @@ namespace Kickstart
     {
         //Global vars
         public Constant Constant { get; private set; } = new Constant();
-
-        public MainPage()
+        public User User { get; private set; }
+        public MainPage(User user)
         {
             //Remove the navigation bar for better view and replace it with the header
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
+            User = user;
             Init();
-
             //Check if the user pressed the back button
             Btn_Return.Clicked += async (sender, args) =>
             {
                 //If the user pressed the button return it to previous page on the stack
-                await Navigation.PopAsync(true);
+                await Navigation.PopToRootAsync();
             };
         }
 
@@ -55,6 +55,7 @@ namespace Kickstart
                     button.HeightRequest = Constant.HeightRequest;
                 }
             }
+            Lbl_Welcome.Text = $"Welcome {User.Username}";
 
             //Footer styling
             Footer.BackgroundColor = Constant.BackGroundColor;

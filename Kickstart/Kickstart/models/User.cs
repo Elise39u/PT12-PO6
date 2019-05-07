@@ -14,5 +14,10 @@ namespace Kickstart.models
             Username = username;
             Password = password;
         }
+
+        public User()
+        {
+
+        }
     }
 }

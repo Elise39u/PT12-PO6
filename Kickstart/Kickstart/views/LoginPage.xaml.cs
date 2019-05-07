@@ -10,6 +10,7 @@ using Xamarin.Forms.Xaml;
 using System.Net.Http.Headers;
 using System.Net;
 using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace Kickstart.views
 {
@@ -77,7 +78,7 @@ namespace Kickstart.views
                 Login_Lbl.Text = "Logging in please wait";
                 Login_Lbl.TextColor = Color.LimeGreen;
 
-                string loginUrl = "http://145.93.141.222/PT1206-API/public/api/login";
+                string loginUrl = "http://i403879.hera.fhict.nl/api/login";
 
                 //Encrypt data and encode it to send it towards the Login api
                 var postData = new List<KeyValuePair<string, string>>
@@ -85,20 +86,25 @@ namespace Kickstart.views
                     new KeyValuePair<string, string>("username", user.Username),
                     new KeyValuePair<string, string>("password", user.Password)
                 };
-                var loginContent = new FormUrlEncodedContent(postData);
-                
+                HttpContent loginContent = new FormUrlEncodedContent(postData);
 
                 //Start the login check
                 try
                 {
                     HttpClient client = new HttpClient();
-
-                    using(var httpRepsone = await client.PostAsync(loginUrl, loginContent)) // <--- Takes too long due to a Operation Canceld Exception
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
+                    
+                    using (var httpRepsone = await client.PostAsync(loginUrl, loginContent))
                     {
                         if (httpRepsone.StatusCode == HttpStatusCode.OK)
                         {
-                            var apiResult = await httpRepsone.Content.ReadAsStreamAsync();
-                            await DisplayAlert("IT worked", apiResult.ToString(), "Okay");
+                            var content = await httpRepsone.Content.ReadAsStringAsync();
+                            var results = JsonConvert.DeserializeObject(content);
+                            var startPage = new MainPage(user);
+                            NavigationPage.SetHasNavigationBar(startPage, false);
+                            await Navigation.PushAsync(startPage);
+                            Login_Lbl.Text = "";
+                            EntryPassword.Text = "";
                         }
                         else
                         {
