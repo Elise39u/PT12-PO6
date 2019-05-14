@@ -14,11 +14,12 @@
         </StackLayout>
         <ScrollView>
             <StackLayout  x:Name="Content" Orientation="Horizontal"  HorizontalOptions="FillAndExpand">
-                <StackLayout Orientation="Vertical"  HorizontalOptions="FillAndExpand">
+                <StackLayout x:Name="SL_LeftRow" Orientation="Vertical"  HorizontalOptions="FillAndExpand">
                     <Button x:Name="Btn_QrCode" Text="QR Scannen" Clicked="QrCode_Clicked"/>
                     <Button x:Name="Btn_Bus" Text="BusLocation"/>
+                    <Button x:Name="Btn_Gps" Text="Get your location" Clicked="Gps_Clicked" />
                 </StackLayout>
-                <StackLayout Orientation="Vertical"  HorizontalOptions="FillAndExpand">
+                <StackLayout x:Name="SL_RightRow" Orientation="Vertical"  HorizontalOptions="FillAndExpand">
                     <Button x:Name="Btn_IncBalance" Text="Inc Balance"/>
                     <Button x:Name="Btn_DecBalance" Text="Dec Balance"/>
                 </StackLayout>

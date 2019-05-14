@@ -9,6 +9,11 @@ using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using ZXing.Net.Mobile.Forms;
 using Kickstart.models;
+using Plugin.Geolocator;
+using Xamarin.Forms.GoogleMaps;
+using System.Net;
+using Newtonsoft.Json;
+using Kickstart.controllers;
 
 namespace Kickstart
 {
@@ -39,7 +44,7 @@ namespace Kickstart
             Header.BackgroundColor = Constant.BackGroundColor;
 
             Lbl_Header.TextColor = Constant.TextColor;
-            Lbl_Header.Margin = new Thickness(5,5,0,10);
+            Lbl_Header.Margin = new Thickness(5, 5, 0, 10);
             Lbl_Header.HeightRequest = Constant.HeightRequest;
 
             Btn_Return.HorizontalOptions = LayoutOptions.EndAndExpand;
@@ -66,7 +71,81 @@ namespace Kickstart
             Lbl_Cr.HeightRequest = 80;
             Lbl_Cr.TextColor = Constant.TextColor;
         }
+   
 
+        private async void Gps_Clicked(object sender, EventArgs e)
+        {
+
+            var GPSChoice = await DisplayAlert("Gps on?", "Is your GPS turned on?", "Yes", "No");
+            if (GPSChoice)
+            {
+
+            }
+            else
+            {
+                await DisplayAlert("Gps is off", "Your GPS is off turned it on", "Okay");
+                return;
+            }
+            try
+            {
+                //Show the Activity spinner
+                this.IsBusy = true;
+                User askedUser = User.GetUser(User.Username);
+                if(askedUser.Latitude == 0 && askedUser.Longitude == 0)
+                {
+                    //Store the Gps location button
+                    var OldButton = Btn_Gps;
+                    Button addLocation = new Button
+                    {
+                        Text = "addLocation",
+                        BackgroundColor = Constant.ButtonBackGroundColor,
+                        TextColor = Constant.TextColor,
+                        WidthRequest = Constant.WidthRequest,
+                        HeightRequest = Constant.HeightRequest
+                    };
+                    addLocation.Clicked += AddLocation_Clicked;
+                    Btn_Gps.IsVisible = false;
+                    SL_LeftRow.Children.Add(addLocation);
+                    await DisplayAlert("No location seen", "your coordinates are at 0 so probaly your first time", "Okay");
+                    this.IsBusy = false;
+                }
+                else
+                {
+
+                }
+            }
+            finally
+            {
+                //Hide the Activity spinner
+                this.IsBusy = false;
+            }
+        }
+
+        private async void AddLocation_Clicked(object sender, EventArgs e)
+        {
+            // Create a Current Location Postion
+            var locator = CrossGeolocator.Current;
+            //Set the DesiredAccuracy
+            locator.DesiredAccuracy = 25;
+            // Try to get the user position
+            var position = await locator.GetPositionAsync(TimeSpan.FromSeconds(25));
+            //Ask the use if they want to change the location
+            var answer = await DisplayAlert("Add Location", "Do you wan't to add your current locatio "
+                + " With Latitude: " + position.Latitude.ToString() + " And Longitude: " + position.Longitude.ToString(), "Yes", "No");
+            //Yes pressed
+            if (answer)
+            {
+                //Go to the edit Location page
+                User.EditLocation(User.Id, position.Latitude, position.Longitude);
+            }
+            //Canceld/ No pressed/ Somewhere else pressed
+            else
+            {
+                //Return null
+                return;
+            }
+        }
+        
         private async void QrCode_Clicked(object sender, EventArgs e)
         {
             //Let the user know if they want to give access to the camera
