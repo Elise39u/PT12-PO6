@@ -5,17 +5,18 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace Kickstart.models
 {
     public class User
     {
-        public int Id { get; private set; }
+        public int Id { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        public double Latitude { get; private set; }
-        public double Longitude { get; private set; }
-        
+        public int Latitude { get; set; }
+        public int Longitude { get; set; }
+
         public User(string username, string password)
         {
             Username = username;
@@ -55,7 +56,8 @@ namespace Kickstart.models
                             // set the response to a var
                             var jsonResponse = sr.ReadToEnd();
                             //Turn the json response intoo a user list
-                            var Data = JsonConvert.DeserializeObject<List<User>>(jsonResponse);
+                            List<User> Data = JsonConvert.DeserializeObject<List<User>>(jsonResponse);
+                            //Something goes wrong in user converter with results in 0 id
                             foreach(User user in Data)
                             {
                                 //Check for the users username and fill the askedUser
@@ -80,13 +82,14 @@ namespace Kickstart.models
             return askedUser;
         }
 
-        public void EditLocation(int userid, double latitude, double longitude)
+        public void EditLocation(string username, int userid, double latitude, double longitude)
         {
             //Create a HttpWebrequest and Set the Method,Contenttype,Api key
-            var webRequest = (HttpWebRequest)WebRequest.Create("http://i403879.hera.fhict.nl/api/users");
-            webRequest.Method = "PUT";
+            var webRequest = (HttpWebRequest)WebRequest.Create("http://i403879.hera.fhict.nl/api/users/" + userid);
+            webRequest.Method = "POST";
             webRequest.ContentType = "application/json";
             webRequest.UseDefaultCredentials = true;
+            webRequest.Timeout = 36000;
 
             using (var streamWritter = new StreamWriter(webRequest.GetRequestStream()))
             {
@@ -95,8 +98,7 @@ namespace Kickstart.models
                 string Longitude_Less = longitude.ToString().Replace(',', '.');
 
                 //Make the Json body
-                string json = "{\"id\":" + userid + ","
-                    + "\"username\":" + this.Username + ","
+                string json = "{\"username\":" + username + ","
                     + "\"latitude\":" + Latitude_Less + ","
                     + "\"longitude\":" + Longitude_Less + "}";
 

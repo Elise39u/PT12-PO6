@@ -20,14 +20,16 @@ namespace Kickstart
     public partial class MainPage : ContentPage
     {
         //Global vars
-        public Constant Constant { get; private set; } = new Constant();
-        public User User { get; private set; }
+        public Constant Constant { get; private set; }
+        public User UserMethods { get; set; } = new User();
+        public User InfoUser { get; set; }
+
         public MainPage(User user)
         {
             //Remove the navigation bar for better view and replace it with the header
             NavigationPage.SetHasNavigationBar(this, false);
             InitializeComponent();
-            User = user;
+            InfoUser = user;
             Init();
             //Check if the user pressed the back button
             Btn_Return.Clicked += async (sender, args) =>
@@ -60,7 +62,7 @@ namespace Kickstart
                     button.HeightRequest = Constant.HeightRequest;
                 }
             }
-            Lbl_Welcome.Text = $"Welcome {User.Username}";
+            Lbl_Welcome.Text = $"Welcome {InfoUser.Username}";
 
             //Footer styling
             Footer.BackgroundColor = Constant.BackGroundColor;
@@ -90,8 +92,8 @@ namespace Kickstart
             {
                 //Show the Activity spinner
                 this.IsBusy = true;
-                User askedUser = User.GetUser(User.Username);
-                if(askedUser.Latitude == 0 && askedUser.Longitude == 0)
+                User TryedUser = UserMethods.GetUser(InfoUser.Username);
+                if(TryedUser.Latitude == 0 && TryedUser.Longitude == 0)
                 {
                     //Store the Gps location button
                     var OldButton = Btn_Gps;
@@ -108,10 +110,95 @@ namespace Kickstart
                     SL_LeftRow.Children.Add(addLocation);
                     await DisplayAlert("No location seen", "your coordinates are at 0 so probaly your first time", "Okay");
                     this.IsBusy = false;
+                    InfoUser.Id = TryedUser.Id;
                 }
                 else
                 {
+                    var locator = CrossGeolocator.Current;
+                    //Set the DeiredAccuracy as low as posible
+                    locator.DesiredAccuracy = 0.01;
+                    //Await the postion of the user
+                    var position = await locator.GetPositionAsync(TimeSpan.FromSeconds(0.01));
+                    Position UserPosition = new Position(position.Latitude, position.Longitude);
 
+                    // Create our custom overlay
+                    var customLayout = new StackLayout { Spacing = 0 };
+                    var map = new Map();
+                    var header_maps = new StackLayout
+                    {
+                        BackgroundColor = Constant.BackGroundColor,
+                        HorizontalOptions = LayoutOptions.FillAndExpand,
+                        VerticalOptions = LayoutOptions.Start,
+
+                    };
+                    var footer_maps = new StackLayout
+                    {
+                        BackgroundColor = Constant.BackGroundColor,
+                        HorizontalOptions = LayoutOptions.FillAndExpand,
+                        VerticalOptions = LayoutOptions.End
+                    };
+                    var CopyRightLabel = new Label
+                    {
+                        Text = "Copyright © 2019, Kickstart",
+                        Margin = new Thickness(95, 0, 0, 0),
+                        TextColor = Color.White,
+                        VerticalOptions = LayoutOptions.EndAndExpand,
+                        VerticalTextAlignment = TextAlignment.Center,
+                        HeightRequest = 75,
+                    };
+                    var BackButton = new Button
+                    {
+                        Text = "Back",
+                        TextColor = Color.White,
+                        BackgroundColor = Color.Transparent,
+                        Margin = new Thickness(0, -50, 25, 0),
+                        HorizontalOptions = LayoutOptions.Center
+                    };
+                    var CopyRightHeaderLabel = new Label
+                    {
+                        Text = "Logo Kickstart",
+                        Margin = new Thickness(95, 0, 0, 0),
+                        TextColor = Color.White,
+                        VerticalOptions = LayoutOptions.EndAndExpand,
+                        VerticalTextAlignment = TextAlignment.Center,
+                        HeightRequest = 75,
+                    };
+
+                    //Set the map to the Items postion
+                    map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(position.Latitude, position.Longitude),
+                                              Distance.FromMiles(0.10)));
+                    //Add some Extra settings
+                    map.MyLocationEnabled = true;
+                    map.UiSettings.MyLocationButtonEnabled = true;
+                    map.UiSettings.CompassEnabled = true;
+
+                    //If the user pressed the MyLocationButton go to the users location
+                    map.MyLocationButtonClicked += async (data, arags) =>
+                    {
+                        var locator2 = CrossGeolocator.Current;
+                        locator.DesiredAccuracy = 0.01;
+                        //Await the users postion
+                        var position2 = await locator.GetPositionAsync(TimeSpan.FromSeconds(0.01));
+                        //Move the Camera and map to the users postion
+                        map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(position2.Latitude, position2.Longitude),
+                                          Distance.FromMiles(0.10)));
+                    };
+
+                    BackButton.Clicked += async (sender1, args) =>
+                    {
+                        await Navigation.PopAsync();
+                    };
+
+                    // Give the header a text label for now
+                    header_maps.Children.Add(CopyRightHeaderLabel);
+                    header_maps.Children.Add(BackButton);
+                    // Give the footer the Copy Right Label
+                    footer_maps.Children.Add(CopyRightLabel);
+                    //Create the layout for the Map page
+                    customLayout.Children.Add(header_maps);
+                    customLayout.Children.Add(map);
+                    customLayout.Children.Add(footer_maps);
+                    Content = customLayout;
                 }
             }
             finally
@@ -136,7 +223,7 @@ namespace Kickstart
             if (answer)
             {
                 //Go to the edit Location page
-                User.EditLocation(User.Id, position.Latitude, position.Longitude);
+                UserMethods.EditLocation(InfoUser.Username, InfoUser.Id, position.Latitude, position.Longitude);
             }
             //Canceld/ No pressed/ Somewhere else pressed
             else
