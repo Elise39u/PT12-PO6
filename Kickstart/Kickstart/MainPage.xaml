@@ -13,7 +13,7 @@
             <Label x:Name="Lbl_Welcome"></Label>
         </StackLayout>
         <ScrollView>
-            <StackLayout  x:Name="Content" Orientation="Horizontal"  HorizontalOptions="FillAndExpand">
+            <StackLayout  x:Name="MiddelPage" Orientation="Horizontal"  HorizontalOptions="FillAndExpand">
                 <StackLayout x:Name="SL_LeftRow" Orientation="Vertical"  HorizontalOptions="FillAndExpand">
                     <Button x:Name="Btn_QrCode" Text="QR Scannen" Clicked="QrCode_Clicked"/>
                     <Button x:Name="Btn_Bus" Text="BusLocation"/>

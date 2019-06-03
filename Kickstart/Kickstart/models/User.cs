@@ -14,8 +14,8 @@ namespace Kickstart.models
         public int Id { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        public int Latitude { get; set; }
-        public int Longitude { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
 
         public User(string username, string password)
         {
@@ -57,7 +57,8 @@ namespace Kickstart.models
                             var jsonResponse = sr.ReadToEnd();
                             //Turn the json response intoo a user list
                             List<User> Data = JsonConvert.DeserializeObject<List<User>>(jsonResponse);
-                            //Something goes wrong in user converter with results in 0 id
+                            //Something goes wrong in Deserialize and skips compleetly the code
+                            //Al the way to the finaly in get location
                             foreach(User user in Data)
                             {
                                 //Check for the users username and fill the askedUser
@@ -84,40 +85,22 @@ namespace Kickstart.models
 
         public void EditLocation(string username, int userid, double latitude, double longitude)
         {
-            //Create a HttpWebrequest and Set the Method,Contenttype,Api key
-            var webRequest = (HttpWebRequest)WebRequest.Create("http://i403879.hera.fhict.nl/api/users/" + userid);
-            webRequest.Method = "POST";
-            webRequest.ContentType = "application/json";
-            webRequest.UseDefaultCredentials = true;
-            webRequest.Timeout = 36000;
 
-            using (var streamWritter = new StreamWriter(webRequest.GetRequestStream()))
-            {
-                //Replace the comma in the Longitude and Latitude to avoid Json errors
-                string Latitude_Less = latitude.ToString().Replace(',', '.');
-                string Longitude_Less = longitude.ToString().Replace(',', '.');
+            WebClient webClient = new WebClient();
+            //Replace the comma in the Longitude and Latitude to avoid Json errors
+            string Latitude_Less = latitude.ToString().Replace(',', '.');
+            string Longitude_Less = longitude.ToString().Replace(',', '.');
 
-                //Make the Json body
-                string json = "{\"username\":" + username + ","
-                    + "\"latitude\":" + Latitude_Less + ","
-                    + "\"longitude\":" + Longitude_Less + "}";
+            string jsonUsername = JsonConvert.SerializeObject(username);
+            string json = "{\"username\":" + jsonUsername + ","
+                + "\"latitude\":" + Latitude_Less + ","
+                + "\"longitude\":" + Longitude_Less + "}";
+            
 
-                //Send the request to the api
-                streamWritter.Write(json);
-                //Clean the Call
-                streamWritter.Flush();
-                //Remove the Api Call
-                streamWritter.Close();
-
-                //Create a Web Response
-                var httpRepsone = (HttpWebResponse)webRequest.GetResponse();
-                //Make a Stream Reader of the ResponseStream
-                using (var streamReader = new StreamReader(httpRepsone.GetResponseStream()))
-                {
-                    // Try to Read the response
-                    var result = streamReader.ReadToEnd();
-                }
-            }
+            //Make the call
+            string webUri = "http://i403879.hera.fhict.nl/api/users/" + userid;
+            webClient.Headers.Add("Content-Type", "application/json");
+            string reply = webClient.UploadString(webUri, "PUT", json);
         }
     }
 }

@@ -52,7 +52,7 @@ namespace Kickstart
             Btn_Return.HorizontalOptions = LayoutOptions.EndAndExpand;
 
             //Content Screen Styling
-            foreach (StackLayout item in Content.Children)
+            foreach (StackLayout item in MiddelPage.Children)
             {
                 foreach (Button button in item.Children)
                 {
@@ -93,7 +93,8 @@ namespace Kickstart
                 //Show the Activity spinner
                 this.IsBusy = true;
                 User TryedUser = UserMethods.GetUser(InfoUser.Username);
-                if(TryedUser.Latitude == 0 && TryedUser.Longitude == 0)
+                InfoUser.Id = TryedUser.Id;
+                if (TryedUser.Latitude == 0 && TryedUser.Longitude == 0)
                 {
                     //Store the Gps location button
                     var OldButton = Btn_Gps;
@@ -110,7 +111,6 @@ namespace Kickstart
                     SL_LeftRow.Children.Add(addLocation);
                     await DisplayAlert("No location seen", "your coordinates are at 0 so probaly your first time", "Okay");
                     this.IsBusy = false;
-                    InfoUser.Id = TryedUser.Id;
                 }
                 else
                 {
@@ -118,12 +118,21 @@ namespace Kickstart
                     //Set the DeiredAccuracy as low as posible
                     locator.DesiredAccuracy = 0.01;
                     //Await the postion of the user
-                    var position = await locator.GetPositionAsync(TimeSpan.FromSeconds(0.01));
+                    var position = await locator.GetPositionAsync(TimeSpan.FromSeconds(0.01)); // Crashed
                     Position UserPosition = new Position(position.Latitude, position.Longitude);
 
                     // Create our custom overlay
-                    var customLayout = new StackLayout { Spacing = 0 };
-                    var map = new Map();
+                    StackLayout stackLayout = new StackLayout { Spacing = 0 };
+                    Map map = new Map();
+
+                    //Set the map to the Users postion
+                    map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(position.Latitude, position.Longitude),
+                                              Distance.FromMiles(0.10)));
+                    //Add some Extra settings
+                    map.MyLocationEnabled = true;
+                    map.UiSettings.MyLocationButtonEnabled = true;
+                    map.UiSettings.CompassEnabled = true;
+
                     var header_maps = new StackLayout
                     {
                         BackgroundColor = Constant.BackGroundColor,
@@ -164,14 +173,6 @@ namespace Kickstart
                         HeightRequest = 75,
                     };
 
-                    //Set the map to the Items postion
-                    map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(position.Latitude, position.Longitude),
-                                              Distance.FromMiles(0.10)));
-                    //Add some Extra settings
-                    map.MyLocationEnabled = true;
-                    map.UiSettings.MyLocationButtonEnabled = true;
-                    map.UiSettings.CompassEnabled = true;
-
                     //If the user pressed the MyLocationButton go to the users location
                     map.MyLocationButtonClicked += async (data, arags) =>
                     {
@@ -184,6 +185,18 @@ namespace Kickstart
                                           Distance.FromMiles(0.10)));
                     };
 
+                    //Edit button
+                    var EditLocation = new Button
+                    {
+                        Text = "Change Location",
+                        Margin = new Thickness(0, -50, 5, 0),
+                        BackgroundColor = Constant.ButtonBackGroundColor,
+                        TextColor = Constant.TextColor,
+                        HeightRequest = 40,
+                        HorizontalOptions = LayoutOptions.EndAndExpand,
+                    };
+                    EditLocation.Clicked += AddLocation_Clicked;
+
                     BackButton.Clicked += async (sender1, args) =>
                     {
                         await Navigation.PopAsync();
@@ -191,14 +204,15 @@ namespace Kickstart
 
                     // Give the header a text label for now
                     header_maps.Children.Add(CopyRightHeaderLabel);
+                    header_maps.Children.Add(EditLocation);
                     header_maps.Children.Add(BackButton);
                     // Give the footer the Copy Right Label
                     footer_maps.Children.Add(CopyRightLabel);
                     //Create the layout for the Map page
-                    customLayout.Children.Add(header_maps);
-                    customLayout.Children.Add(map);
-                    customLayout.Children.Add(footer_maps);
-                    Content = customLayout;
+                    stackLayout.Children.Add(header_maps);
+                    stackLayout.Children.Add(map);
+                    stackLayout.Children.Add(footer_maps);
+                    Content = stackLayout;
                 }
             }
             finally
@@ -322,15 +336,15 @@ namespace Kickstart
                     var vibrate = CrossVibrate.Current;
                     vibrate.Vibration(TimeSpan.FromSeconds(0.25));
                     await Navigation.PopAsync();
-                    //Check iff the qrcode contains Kleyn
+                    //Check iff the qrcode contains something
                     if (result.Text != "")
                     {
                         await DisplayAlert("Found", result.Text, "Well okay");
                     }
-                    //If kleyn is not detected send a error back
+                    //If A error occuerd/ nothing is detected send a error back
                     else
                     {
-                        await DisplayAlert("ERROR", "Not a vail qr code ", "OK");
+                        await DisplayAlert("ERROR", "Not a vaild qr code ", "OK");
                     }
 
                 });
