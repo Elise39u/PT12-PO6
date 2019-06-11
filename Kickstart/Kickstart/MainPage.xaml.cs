@@ -14,6 +14,7 @@ using Xamarin.Forms.GoogleMaps;
 using System.Net;
 using Newtonsoft.Json;
 using Kickstart.controllers;
+using Kickstart.views;
 
 namespace Kickstart
 {
@@ -349,6 +350,28 @@ namespace Kickstart
 
                 });
             };
+        }
+
+        private async void Btn_ProfilePage_ClickedAsync(object sender, EventArgs e)
+        {
+            User TryedUser = UserMethods.GetUser(InfoUser.Username);
+            var profilePage = new ProfilePage(TryedUser);
+            NavigationPage.SetHasNavigationBar(profilePage, false);
+            await Navigation.PushAsync(profilePage);
+        }
+
+        private async void Btn_IncBalance_ClickedAsync(object sender, EventArgs e)
+        {
+            var IncPage = new IncBalance();
+            NavigationPage.SetHasNavigationBar(IncPage, false);
+            await Navigation.PushAsync(IncPage);
+        }
+
+        private async void Btn_DecBalance_Clicked(object sender, EventArgs e)
+        {
+            var DecPage = new DecBalance();
+            NavigationPage.SetHasNavigationBar(DecPage, false);
+            await Navigation.PushAsync(DecPage);
         }
     }
 }

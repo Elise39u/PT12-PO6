@@ -20,8 +20,9 @@
                     <Button x:Name="Btn_Gps" Text="Get your location" Clicked="Gps_Clicked" />
                 </StackLayout>
                 <StackLayout x:Name="SL_RightRow" Orientation="Vertical"  HorizontalOptions="FillAndExpand">
-                    <Button x:Name="Btn_IncBalance" Text="Inc Balance"/>
-                    <Button x:Name="Btn_DecBalance" Text="Dec Balance"/>
+                    <Button x:Name="Btn_IncBalance" Text="Inc Balance" Clicked="Btn_IncBalance_ClickedAsync"/>
+                    <Button x:Name="Btn_DecBalance" Text="Dec Balance" Clicked="Btn_DecBalance_Clicked"/>
+                    <Button x:Name="Btn_ProfilePage" Text="Profile Page" Clicked="Btn_ProfilePage_ClickedAsync"/>
                 </StackLayout>
             </StackLayout>
         </ScrollView>
