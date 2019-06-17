@@ -11,17 +11,17 @@ using Xamarin.Forms.Xaml;
 namespace Kickstart.views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class ProfilePage : ContentPage
-	{
+	public partial class EditProfilePage : ContentPage
+    {
         public User PersonalUser { get; private set; }
+        public ApiCalls ApiCaller { get; } = new ApiCalls();
 
-		public ProfilePage (User user)
+		public EditProfilePage (User user)
 		{
 			InitializeComponent ();
             PersonalUser = user;
             Init();
-            // Solved with https://stackoverflow.com/questions/37660525/how-to-have-2-data-binding-fields-in-one-xamarin-forms-label
-            Lbl_InfoLabel.BindingContext = PersonalUser;
+
             //Check if the user pressed the back button
             Btn_Return.Clicked += async (sender, args) =>
             {
@@ -41,13 +41,20 @@ namespace Kickstart.views
             Lbl_Header.HeightRequest = Constant.HeightRequest;
 
             Btn_Return.HorizontalOptions = LayoutOptions.EndAndExpand;
-            Lbl_Welcome.Text = $"{PersonalUser.Username} your profile page";
 
             //Middle part styling
-            Btn_GoToEditPage.BackgroundColor = Constant.ButtonBackGroundColor;
-            Btn_GoToEditPage.TextColor = Constant.TextColor;
-            Btn_GoToEditPage.WidthRequest = Constant.WidthRequest;
-            Btn_GoToEditPage.HeightRequest = Constant.HeightRequest;
+            EntryUsername.Placeholder = PersonalUser.Username;
+            EntryUsername.PlaceholderColor = Color.DarkGray;
+            EntryPassword.Placeholder = PersonalUser.Password;
+            EntryPassword.PlaceholderColor = Color.DarkGray;
+            EntryEmail.Placeholder = PersonalUser.Email;
+            EntryEmail.PlaceholderColor = Color.DarkGray;
+
+            Btn_Submit.BackgroundColor = Constant.ButtonBackGroundColor;
+            Btn_Submit.TextColor = Constant.TextColor;
+            Btn_Submit.WidthRequest = Constant.WidthRequest;
+            Btn_Submit.HeightRequest = Constant.HeightRequest;
+
 
             //Footer styling
             Footer.BackgroundColor = Constant.BackGroundColor;
@@ -59,11 +66,14 @@ namespace Kickstart.views
             Lbl_Cr.TextColor = Constant.TextColor;
         }
 
-        private async void Btn_GoToEditPage_ClickedAsync(object sender, EventArgs e)
+        private async void Btn_Submit_ClickedAsync(object sender, EventArgs e)
         {
-            var editProfilePage = new EditProfilePage(PersonalUser);
-            NavigationPage.SetHasNavigationBar(editProfilePage, false);
-            await Navigation.PushAsync(editProfilePage);
+            if(EntryUsername.Text == "" || EntryEmail.Text == "")
+            {
+                await DisplayAlert("Error", "some * fields are left empty", "abort");
+                return;
+            }
+            ApiCaller.UpdateUser(PersonalUser.Id, EntryUsername.Text, EntryPassword.Text, EntryEmail.Text);
         }
     }
 }

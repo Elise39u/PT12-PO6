@@ -108,7 +108,18 @@ namespace Kickstart.views
                         }
                         else
                         {
-                            await DisplayAlert("Something Happend", httpRepsone.StatusCode.ToString(), "Okay");
+                            if(HttpStatusCode.InternalServerError == httpRepsone.StatusCode)
+                            {
+                                await DisplayAlert("Error occuerd", "The monkeys did something bad hang on", "Okay");
+                            }
+                            if(HttpStatusCode.MethodNotAllowed == httpRepsone.StatusCode)
+                            {
+                                await DisplayAlert("Error occuerd", "Monkeys told me you used the wrong request", "Okay");
+                            }
+                            if(HttpStatusCode.NotFound == httpRepsone.StatusCode)
+                            {
+                                await DisplayAlert("Error occuerd", "The monkeys are missing or your info hang on when i take a look", "Okay");
+                            }
                         }
                     }
                 }

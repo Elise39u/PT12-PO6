@@ -23,6 +23,7 @@ namespace Kickstart
         //Global vars
         public Constant Constant { get; private set; }
         public User UserMethods { get; set; } = new User();
+        public ApiCalls ApiCaller { get; set; } = new ApiCalls();
         public User InfoUser { get; set; }
 
         public MainPage(User user)
@@ -93,7 +94,7 @@ namespace Kickstart
             {
                 //Show the Activity spinner
                 this.IsBusy = true;
-                User TryedUser = UserMethods.GetUser(InfoUser.Username);
+                User TryedUser = ApiCaller.GetUser(InfoUser.Username);
                 InfoUser = TryedUser;
                 if (TryedUser.Latitude == 0 && TryedUser.Longitude == 0)
                 {
@@ -354,7 +355,7 @@ namespace Kickstart
 
         private async void Btn_ProfilePage_ClickedAsync(object sender, EventArgs e)
         {
-            User TryedUser = UserMethods.GetUser(InfoUser.Username);
+            User TryedUser = ApiCaller.GetUser(InfoUser.Username);
             var profilePage = new ProfilePage(TryedUser);
             NavigationPage.SetHasNavigationBar(profilePage, false);
             await Navigation.PushAsync(profilePage);

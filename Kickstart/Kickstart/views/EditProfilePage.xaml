@@ -1,23 +1,23 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Kickstart.views.ProfilePage">
+             x:Class="Kickstart.views.EditProfilePage">
     <ContentPage.Content>
-        
         <StackLayout x:Name="MasterLayout">
             <StackLayout x:Name="Header"  Orientation="Horizontal" VerticalOptions="Start">
                 <Label x:Name="Lbl_Header" Text="Logo Kickstart"/>
                 <Button x:Name="Btn_Return" TextColor="White" BorderWidth="0" BorderColor="Transparent" BackgroundColor="Transparent" Text="Back" Margin=" 0,10,20,5"/>
             </StackLayout>
-            <StackLayout x:Name="NonButtonContent">
-                <Label x:Name="Lbl_Welcome"></Label>
+            <StackLayout x:Name="MiddlePart">
+                <Label x:Name="Lbl_Warning" Text="Fields with a * are required"  FontAttributes="Bold" TextColor="Red"/>
+                <Label x:Name="Lbl_Username" Text="Username:*" FontAttributes="Bold"/>
+                <Entry x:Name="EntryUsername" Placeholder="Username" Text="" Margin="0,20,0,10"/>
+                <Label x:Name="Lbl_Password" Text="Fill something in if you want to change your password" FontAttributes="Bold"/>
+                <Entry x:Name="EntryPassword" Placeholder="Password" Text=""/>
+                <Label x:Name="Lbl_Email" Text="Email:*" FontAttributes="Bold"/>
+                <Entry x:Name="EntryEmail" Placeholder="Email" Text=""/>
+                <Button x:Name="Btn_Submit" Text="Submit Changes" Clicked="Btn_Submit_ClickedAsync"/>
             </StackLayout>
-            <ScrollView>
-                <StackLayout  x:Name="MiddelPart" Orientation="Horizontal"  HorizontalOptions="FillAndExpand">
-                    <Label x:Name="Lbl_InfoLabel" Text="{Binding BindData}"></Label>
-                </StackLayout>
-            </ScrollView>
-            <Button x:Name="Btn_GoToEditPage" Text="Edit your profile" Clicked="Btn_GoToEditPage_ClickedAsync"/>
             <StackLayout x:Name="Footer" Orientation="Horizontal" VerticalOptions="EndAndExpand" Margin="0,0,0,-5">
                 <Label x:Name="Lbl_Cr" Text="Copyright © 2019, KickStart Company" Margin="75, 0, 0, 0"/>
             </StackLayout>
