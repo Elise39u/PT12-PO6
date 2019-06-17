@@ -94,7 +94,7 @@ namespace Kickstart
                 //Show the Activity spinner
                 this.IsBusy = true;
                 User TryedUser = UserMethods.GetUser(InfoUser.Username);
-                InfoUser.Id = TryedUser.Id;
+                InfoUser = TryedUser;
                 if (TryedUser.Latitude == 0 && TryedUser.Longitude == 0)
                 {
                     //Store the Gps location button

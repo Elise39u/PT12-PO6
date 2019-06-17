@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,12 +12,17 @@ namespace Kickstart.models
 {
     public class User
     {
-        public int Id { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
+        [JsonProperty]
+        public int Id { get; private set; }
+        [JsonProperty]
+        public string Username { get;  private set; }
+        [JsonProperty]
+        public string Password { get; private set; }
+        [JsonProperty]
+        public string Email { get; private set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public string BindData => $"Username: {Username} \n" + $"Email: {Email} \n" + $"Latitude: {Latitude} \n" + $"Longitude: {Longitude}";
 
         public User(string username, string password)
         {
@@ -27,6 +33,13 @@ namespace Kickstart.models
         public User()
         {
 
+        }
+
+        public User(int id, string username, string email)
+        {
+            Id = id;
+            Username = username;
+            Email = email;
         }
 
         public User GetUser(string username)
@@ -58,8 +71,11 @@ namespace Kickstart.models
                             var jsonResponse = sr.ReadToEnd();
                             //Turn the json response intoo a user list
                             List<User> Data = JsonConvert.DeserializeObject<List<User>>(jsonResponse);
-                            //Something goes wrong in Deserialize and skips compleetly the code
-                            //Al the way to the finaly in get location
+                            /*
+                            return Data
+                                .Where(u => u.Username == username)
+                                .FirstOrDefault();
+                                */
                             foreach(User user in Data)
                             {
                                 //Check for the users username and fill the askedUser
@@ -67,9 +83,6 @@ namespace Kickstart.models
                                 {
                                     askedUser.Id = user.Id;
                                     askedUser.Username = user.Username;
-                                    askedUser.Password = user.Password;
-                                    askedUser.Latitude = user.Latitude;
-                                    askedUser.Longitude = user.Longitude;
                                     askedUser.Email = user.Email;
                                 }
                             }

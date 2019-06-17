@@ -14,31 +14,7 @@
             </StackLayout>
             <ScrollView>
                 <StackLayout  x:Name="MiddelPart" Orientation="Horizontal"  HorizontalOptions="FillAndExpand">
-                    <ListView x:Name="LV_ProfilePage">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <Grid x:Name="DataGrid">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="*" />
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-
-                                        <!--Left column - BindingContext set to ModelPair.Item1   -->
-                                        <Label  Grid.Row="0" Grid.Column="0"
-                                              BackgroundColor="Green" Text="{Binding Value}"  HorizontalOptions="Start" FontAttributes="Bold"/>
-
-                                        <!--Right column - BindingContext set to ModelPair.Item2 Margin="0,-30,0,0 -->
-                                        <Label Grid.Row="0" Grid.Column="1"
-                                              BackgroundColor="Red" Text="{Binding Path}" HorizontalOptions="End"/>
-                                    </Grid>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                    <Label x:Name="Lbl_InfoLabel" Text="{Binding BindData}"></Label>
                 </StackLayout>
             </ScrollView>
             <StackLayout x:Name="Footer" Orientation="Horizontal" VerticalOptions="EndAndExpand" Margin="0,0,0,-5">

@@ -21,8 +21,8 @@ namespace Kickstart.views
 			InitializeComponent ();
             PersonalUser = user;
             Init();
-            User InfoUser = getUser();
-            LV_ProfilePage.BindingContext = InfoUser;
+            // Solved with https://stackoverflow.com/questions/37660525/how-to-have-2-data-binding-fields-in-one-xamarin-forms-label
+            Lbl_InfoLabel.BindingContext = PersonalUser;
             //Check if the user pressed the back button
             Btn_Return.Clicked += async (sender, args) =>
             {
