@@ -92,5 +92,28 @@ namespace Kickstart.models
                 return ex.Message;
             }
         }
+
+        public int UpdateUserBalance(int id, int amount, string username, char Operator)
+        {
+            User currentUser = GetUser(username);
+
+            WebClient webClient = new WebClient();
+            int updatedBalance;
+            if(Operator == '+')
+            {
+                updatedBalance = currentUser.Balance + amount;
+            }
+            else
+            {
+                updatedBalance = currentUser.Balance - amount;
+            }
+
+            string json = "{\"balance\":" + updatedBalance  + "}";
+
+            //Make the call
+            webClient.Headers.Add("Content-Type", "application/json");
+            string reply = webClient.UploadString(API_Address + $"users/{currentUser.Id}", "PUT", json);
+            return updatedBalance;
+        }
     }
 }

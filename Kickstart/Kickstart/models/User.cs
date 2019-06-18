@@ -20,6 +20,8 @@ namespace Kickstart.models
         public string Password { get; private set; }
         [JsonProperty]
         public string Email { get; private set; }
+        [JsonProperty]
+        public int Balance { get; private set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public string BindData => $"Username: {Username} \n" + $"Email: {Email} \n" + $"Latitude: {Latitude} \n" + $"Longitude: {Longitude}";
@@ -35,11 +37,12 @@ namespace Kickstart.models
 
         }
 
-        public User(int id, string username, string email)
+        public User(int id, string username, string email, int balance)
         {
             Id = id;
             Username = username;
             Email = email;
+            Balance = balance;
         }
 
         public void EditLocation(string username, int userid, double latitude, double longitude)

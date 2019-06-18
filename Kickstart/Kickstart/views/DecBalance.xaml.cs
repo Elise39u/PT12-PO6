@@ -12,11 +12,15 @@ namespace Kickstart.views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class DecBalance : ContentPage
-	{
-		public DecBalance ()
+    {
+        public User PersonalUser { get; private set; }
+        private ApiCalls ApiCaller { get; } = new ApiCalls();
+
+        public DecBalance (User user)
 		{
 			InitializeComponent();
             Init();
+            PersonalUser = user;
             //Check if the user pressed the back button
             Btn_Return.Clicked += async (sender, args) =>
             {
@@ -48,7 +52,8 @@ namespace Kickstart.views
 
         private async void Btn_Decbalance_Clicked(object sender, EventArgs e)
         {
-            await DisplayAlert("Succes", "Your balance is decreased", "okayy");
+            int balance = ApiCaller.UpdateUserBalance(PersonalUser.Id, Convert.ToInt32(Ent_DecBalance.Text), PersonalUser.Username, '-');
+            await DisplayAlert("Succes", $"Balance decreased by: {balance}", "Okay");
         }
     }
 }

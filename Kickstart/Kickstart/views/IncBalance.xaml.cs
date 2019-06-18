@@ -13,10 +13,14 @@ namespace Kickstart.views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class IncBalance : ContentPage
 	{
-		public IncBalance ()
+        public User PersonalUser { get; private set; }
+        private ApiCalls ApiCaller { get; } = new ApiCalls();
+
+		public IncBalance (User user)
 		{
 			InitializeComponent();
             Init();
+            PersonalUser = user;
             //Check if the user pressed the back button
             Btn_Return.Clicked += async (sender, args) =>
             {
@@ -47,9 +51,10 @@ namespace Kickstart.views
             Lbl_Cr.TextColor = Constant.TextColor;
         }
 
-        private async void Btn_incbalance_Clicked(object sender, EventArgs e)
+        private async void Btn_incbalance_ClickedAsync(object sender, EventArgs e)
         {
-            await DisplayAlert("Succes", "Your balance is increased", "okayy");
+            int balance = ApiCaller.UpdateUserBalance(PersonalUser.Id, Convert.ToInt32(Ent_IncBalance.Text), PersonalUser.Username, '+');
+            await DisplayAlert("Succes", $"Balance increased by: {balance}", "Okay");
         }
     }
 }

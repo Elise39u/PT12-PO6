@@ -363,14 +363,14 @@ namespace Kickstart
 
         private async void Btn_IncBalance_ClickedAsync(object sender, EventArgs e)
         {
-            var IncPage = new IncBalance();
+            var IncPage = new IncBalance(InfoUser);
             NavigationPage.SetHasNavigationBar(IncPage, false);
             await Navigation.PushAsync(IncPage);
         }
 
         private async void Btn_DecBalance_Clicked(object sender, EventArgs e)
         {
-            var DecPage = new DecBalance();
+            var DecPage = new DecBalance(InfoUser);
             NavigationPage.SetHasNavigationBar(DecPage, false);
             await Navigation.PushAsync(DecPage);
         }

@@ -10,7 +10,7 @@
                 <Button x:Name="Btn_Return" TextColor="White" BorderWidth="0" BorderColor="Transparent" BackgroundColor="Transparent" Text="Back" Margin=" 0,10,20,5"/>
             </StackLayout>
             <StackLayout x:Name="MiddelPart">
-                <Entry Placeholder="Enter a number"  PlaceholderColor="Olive" IsTextPredictionEnabled="True"/>
+                <Entry Placeholder="Enter a number" x:Name="Ent_DecBalance"   PlaceholderColor="Olive" IsTextPredictionEnabled="True"/>
                 <Button Text="Decrease balance" x:Name="Btn_Decbalance" Clicked="Btn_Decbalance_Clicked"></Button>
             </StackLayout>
             <StackLayout x:Name="Footer" Orientation="Horizontal" VerticalOptions="EndAndExpand" Margin="0,0,0,-5">
