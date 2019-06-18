@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Net;
 using System.Linq;
 using System.Text;
+using Kickstart.views;
+using Xamarin.Forms;
 
 namespace Kickstart.models
 {
@@ -21,7 +23,7 @@ namespace Kickstart.models
             try
             {
                 //Create the request
-                var webRequest = WebRequest.Create(API_Address);
+                var webRequest = WebRequest.Create(API_Address + "users");
                 //Check if the Request isn`t null
                 if (webRequest != null)
                 {
@@ -50,35 +52,45 @@ namespace Kickstart.models
             //If a error occured throw a Exception
             catch (WebException ex)
             {
-                //Think about a error that fits the return of a user object
+                if(ex.InnerException is TimeoutException)
+                {
+                    throw new Exception(ex.Message);
+                }
             }
             return askedUser;
         }
 
         
-        public void UpdateUser(int id, string username, string password, string email)
+        public string UpdateUserAsync(int id, string username, string password, string email)
         {
-
             WebClient webClient = new WebClient();
 
             string jsonUsername = JsonConvert.SerializeObject(username);
+            string jsonEmail = JsonConvert.SerializeObject(email);
             string json;
-
-            if(password == "")
+            try
             {
-                json = "{\"username\":" + jsonUsername + ","
-                    + "\"Email\":" + email + "}";
-            }
-            else
-            {
-                 json = "{\"username\":" + jsonUsername + ","
-                    + "\"Email\":" + email + ","
-                    + "\"Password\":" + password + "}";
-            }
+                if (password == "")
+                {
+                    json = "{\"username\":" + jsonUsername + ","
+                        + "\"Email\":" + jsonEmail + "}";
+                }
+                else
+                {
+                    json = "{\"username\":" + jsonUsername + ","
+                       + "\"Email\":" + jsonEmail + ","
+                       + "\"Password\":" + password + "}";
+                }
 
-            //Make the call
-            webClient.Headers.Add("Content-Type", "application/json");
-            string reply = webClient.UploadString(API_Address + $"users/{id}", "PUT", json);
+                //Make the call
+                webClient.Headers.Add("Content-Type", "application/json");
+                string reply = webClient.UploadString(API_Address + $"users/{id}", "PUT", json);
+                return "Succes";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
         }
     }
 }

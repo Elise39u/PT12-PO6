@@ -9,7 +9,7 @@
                 <Button x:Name="Btn_Return" TextColor="White" BorderWidth="0" BorderColor="Transparent" BackgroundColor="Transparent" Text="Back" Margin=" 0,10,20,5"/>
             </StackLayout>
             <StackLayout x:Name="MiddlePart">
-                <Label x:Name="Lbl_Warning" Text="Fields with a * are required"  FontAttributes="Bold" TextColor="Red"/>
+                <Label x:Name="Lbl_Warning" Text="Fields with a * are required if you want to change a item"  FontAttributes="Bold" TextColor="Red"/>
                 <Label x:Name="Lbl_Username" Text="Username:*" FontAttributes="Bold"/>
                 <Entry x:Name="EntryUsername" Placeholder="Username" Text="" Margin="0,20,0,10"/>
                 <Label x:Name="Lbl_Password" Text="Fill something in if you want to change your password" FontAttributes="Bold"/>

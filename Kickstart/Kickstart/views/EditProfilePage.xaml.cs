@@ -73,7 +73,18 @@ namespace Kickstart.views
                 await DisplayAlert("Error", "some * fields are left empty", "abort");
                 return;
             }
-            ApiCaller.UpdateUser(PersonalUser.Id, EntryUsername.Text, EntryPassword.Text, EntryEmail.Text);
+            var UpdateUser = ApiCaller.UpdateUserAsync(PersonalUser.Id, EntryUsername.Text, EntryPassword.Text, EntryEmail.Text);
+            if (UpdateUser == "Succes")
+            {
+                await DisplayAlert("Succes", "Your personal info has been updated pleas re-login", "login");
+
+                var loginPage = new LoginPage();
+                NavigationPage.SetHasNavigationBar(loginPage, false);
+                await Navigation.PushAsync(loginPage);
+            } else
+            {
+                await DisplayAlert("Error", "A error occuerd our monkeys are investigating", "Okay");
+            }
         }
     }
 }
